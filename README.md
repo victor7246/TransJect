@@ -1,10 +1,18 @@
 TransJect is an encoder-decoder model that guarantees a theoretical bound for layer-wise distance preservation between a pair of tokens. We propose a simple alternative to dot-product attention to ensure Lipschitz continuity. This allows TransJect to learn injective mappings to transform token representations to different manifolds with similar topology and preserve Euclidean distance between every pair of tokens in subsequent layers. 
 
 ## How to run 
+Run TransJect on IMDb classification
+
+```
+python imdb_classification.py \
+	--use_ortho \
+	--epochs 10
+```
+
 Run TransJect on PTB language modelling
 
 ```
-python language_model_transject.py \
+python language_modeling.py \
 	--use_ortho \
 	--use_rezero \
 	--n_head 4 \

@@ -20,7 +20,7 @@ import copy
 from typing import Optional, Any, Union, Callable
 from torch import Tensor
 
-from models.layers import IsoAttention, IsoEncoderSubLayer, IsoEncoderLayer
+from models.layers import IsoEncoderLayer
 
 import dotenv
 
@@ -59,8 +59,6 @@ class IsoEncoder(Module):
 
         self.all_resweights = []
         # Implementation of Feedforward model
-        #self.linear1 = torch.nn.utils.parametrizations.orthogonal(Linear(d_model, dim_feedforward)) #dim_feedforward
-        #self.linear2 = torch.nn.utils.parametrizations.orthogonal(Linear(dim_feedforward, dim_feedforward)) #dim_feedforward
         self.use_LayerNorm = use_LayerNorm
 
         if activation == "relu":
@@ -78,26 +76,7 @@ class IsoEncoder(Module):
         super(IsoEncoder, self).__setstate__(state)
 
     def forward(self, src, eig, src_mask=None, src_key_padding_mask=None):
-        # type: (Tensor, Optional[Tensor], Optional[Tensor]) -> Tensor
-        r"""Pass the input through the encoder layer.
-        Args:
-            src: the sequence to the encoder layer (required).
-            src_mask: the mask for the src sequence (optional).
-            src_key_padding_mask: the mask for the src keys per batch (optional).
-        Shape:
-            see the docs in Transformer class.
-        """
-        #self.linear1.weight = torch.nn.Parameter(F.softmax(self.linear1.weight, -1)).to(src.device)
-        #self.linear2.weight = torch.nn.Parameter(F.softmax(self.linear2.weight, -1)).to(src.device)
-
         out = self.self_attn(src, self.resweight, eig)
-        #out = self.self_attn(src, src, src, attn_mask=src_mask, key_padding_mask=src_key_padding_mask)[0]
-        #out = src + self.resweight * out
-
-        #out2 = F.elu(self.linear2(F.elu(self.linear1(out))))
-        #out = out + self.resweight * out2
-
-        #self.all_resweights.append(self.resweight)
 
         return out
 
